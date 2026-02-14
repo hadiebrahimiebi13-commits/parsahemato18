@@ -1,97 +1,496 @@
-<!-- Tailwind -->
-<script src="https://cdn.tailwindcss.com"></script>
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>هماتولوژی - دوره آموزشی</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<!-- Font -->
-<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+        body {
+            font-family: 'Tahoma', 'Arial', sans-serif;
+            background: #f4f6f9;
+            direction: rtl;
+            color: #333;
+        }
 
-<style>
-    body {
-        font-family: 'Vazirmatn', sans-serif;
-        background: #f3f4f6;
-    }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
 
-    .gradient-header {
-        background: linear-gradient(135deg, #2563eb, #1e40af);
-    }
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            overflow-y: auto;
+            padding: 20px 0;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+        }
 
-    .chapter-card {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-        transition: all 0.25s ease;
-    }
+        .sidebar-header {
+            padding: 0 15px 20px 15px;
+            border-bottom: 1px solid #34495e;
+            margin-bottom: 15px;
+        }
 
-    .chapter-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 15px 25px rgba(0,0,0,0.12);
-    }
+        .sidebar-header h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
 
-    .icon-circle {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        background: #eff6ff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: auto;
-    }
-</style>
-<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        .sidebar-header p {
+            font-size: 12px;
+            color: #bdc3c7;
+        }
 
-    <!-- Chapter Template (10x تکرار شده) -->
+        .section-title {
+            padding: 15px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #bdc3c7;
+            background: #1a252f;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-    <a href="chapters/chapter1.html" class="chapter-card p-6 text-center">
-        <div class="icon-circle text-blue-600 text-3xl">📘</div>
-        <h3 class="mt-4 font-bold">فصل ۱</h3>
-        <p class="text-xs text-gray-500 mt-1">مقدمه گوارش</p>
-    </a>
+        .chapter-btn {
+            padding: 12px 15px;
+            margin: 3px 10px;
+            background: #34495e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+            text-align: right;
+            display: block;
+            width: calc(100% - 20px);
+        }
 
-    <a href="chapters/chapter2.html" class="chapter-card p-6 text-center">
-        <div class="icon-circle text-blue-600 text-3xl">🧪</div>
-        <h3 class="mt-4 font-bold">فصل ۲</h3>
-        <p class="text-xs text-gray-500 mt-1">سوء جذب</p>
-    </a>
+        .chapter-btn:hover {
+            background: #3d5a73;
+            padding-left: 20px;
+        }
 
-    <a href="chapters/chapter3.html" class="chapter-card p-6 text-center">
-        <div class="icon-circle text-blue-600 text-3xl">🦠</div>
-        <h3 class="mt-4 font-bold">فصل ۳</h3>
-        <p class="text-xs text-gray-500 mt-1">عفونت‌ها</p>
-    </a>
+        .chapter-btn.active {
+            background: #3498db;
+            font-weight: bold;
+        }
 
-    <a href="chapters/chapter4.html" class="chapter-card p-6 text-center">
-        <div class="icon-circle text-blue-600 text-3xl">🩺</div>
-        <h3 class="mt-4 font-bold">فصل ۴</h3>
-    </a>
+        #bookmarkList .chapter-btn {
+            background: #e74c3c;
+            margin: 5px 10px;
+        }
 
-    <a href="chapters/chapter5.html" class="chapter-card p-6 text-center">
-        <div class="icon-circle text-blue-600 text-3xl">🧬</div>
-        <h3 class="mt-4 font-bold">فصل ۵</h3>
-    </a>
+        #bookmarkList .chapter-btn:hover {
+            background: #c0392b;
+        }
 
-    <a href="chapters/chapter6.html" class="chapter-card p-6 text-center">
-        <div class="icon-circle text-blue-600 text-3xl">💊</div>
-        <h3 class="mt-4 font-bold">فصل ۶</h3>
-    </a>
+        .empty-message {
+            padding: 15px;
+            font-size: 12px;
+            color: #95a5a6;
+            text-align: center;
+        }
 
-    <a href="chapters/chapter7.html" class="chapter-card p-6 text-center">
-        <div class="icon-circle text-blue-600 text-3xl">🔬</div>
-        <h3 class="mt-4 font-bold">فصل ۷</h3>
-    </a>
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
 
-    <a href="chapters/chapter8.html" class="chapter-card p-6 text-center">
-        <div class="icon-circle text-blue-600 text-3xl">📊</div>
-        <h3 class="mt-4 font-bold">فصل ۸</h3>
-    </a>
+        header {
+            background: white;
+            border-bottom: 2px solid #ecf0f1;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    <a href="chapters/chapter9.html" class="chapter-card p-6 text-center">
-        <div class="icon-circle text-blue-600 text-3xl">🧾</div>
-        <h3 class="mt-4 font-bold">فصل ۹</h3>
-    </a>
+        header h1 {
+            font-size: 22px;
+            color: #2c3e50;
+        }
 
-    <a href="chapters/chapter10.html" class="chapter-card p-6 text-center">
-        <div class="icon-circle text-blue-600 text-3xl">🏁</div>
-        <h3 class="mt-4 font-bold">فصل ۱۰</h3>
-    </a>
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
 
-</div>
+        .nav-btn {
+            padding: 8px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #2980b9;
+        }
+
+        .nav-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        /* ===== CONTENT AREA ===== */
+        .content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: white;
+        }
+
+        #contentArea {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .welcome {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .welcome h3 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .welcome p {
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+
+        #contentArea h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        #contentArea h3 {
+            color: #34495e;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        #contentArea p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        #contentArea ul, #contentArea ol {
+            margin: 0 0 15px 20px;
+            line-height: 1.8;
+        }
+
+        #contentArea li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .bookmark-btn {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .bookmark-btn:hover {
+            background: #e67e22;
+        }
+
+        .bookmark-btn.bookmarked {
+            background: #27ae60;
+        }
+
+        /* ===== LOADING ===== */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+
+        .spinner {
+            border: 3px solid #ecf0f1;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 0.8s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+                max-height: 40vh;
+                border-bottom: 2px solid #34495e;
+            }
+
+            .main {
+                height: auto;
+            }
+
+            .content-wrapper {
+                height: auto;
+                padding: 15px;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 10px;
+                justify-content: center;
+            }
+
+            header h1 {
+                font-size: 18px;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-btn {
+                flex: 1;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        .sidebar::-webkit-scrollbar,
+        .content-wrapper::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track,
+        .content-wrapper::-webkit-scrollbar-track {
+            background: #ecf0f1;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb,
+        .content-wrapper::-webkit-scrollbar-thumb {
+            background: #95a5a6;
+            border-radius: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover,
+        .content-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>دوره هماتولوژی</h2>
+                <p>20 فصل آموزشی</p>
+            </div>
+
+            <!-- نشانک‌ها -->
+            <div class="section-title">📌 نشانک‌های من</div>
+            <div id="bookmarkList" class="empty-message">نشانکی وجود ندارد</div>
+
+            <!-- فصول -->
+            <div class="section-title">🔖 تمام فصول</div>
+            <div id="chapterList"></div>
+        </aside>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <div class="main">
+            <header>
+                <h1 id="pageTitle">هماتولوژی</h1>
+                <div class="nav-buttons">
+                    <button class="nav-btn" id="prevBtn" onclick="previousChapter()">← قبلی</button>
+                    <button class="nav-btn" id="nextBtn" onclick="nextChapter()">بعدی →</button>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <div id="contentArea">
+                    <div class="welcome">
+                        <h3>خوش آمدید</h3>
+                        <p>برای شروع یک فصل را از منو انتخاب کنید</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentChapter = null;
+        let bookmarks = [];
+        const TOTAL_CHAPTERS = 20;
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBookmarks();
+            renderChapterList();
+            renderBookmarkList();
+        });
+
+        // ===== BOOKMARKS FUNCTIONS =====
+        function loadBookmarks() {
+            const stored = localStorage.getItem('bookmarks');
+            bookmarks = stored ? JSON.parse(stored) : [];
+        }
+
+        function saveBookmarks() {
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+        }
+
+        function toggleBookmark(chapter) {
+            if (bookmarks.includes(chapter)) {
+                bookmarks = bookmarks.filter(c => c !== chapter);
+            } else {
+                bookmarks.push(chapter);
+                bookmarks.sort((a, b) => a - b);
+            }
+            saveBookmarks();
+            updateBookmarkButton();
+            renderBookmarkList();
+        }
+
+        function renderBookmarkList() {
+            const list = document.getElementById('bookmarkList');
+            if (bookmarks.length === 0) {
+                list.innerHTML = '<div class="empty-message">نشانکی وجود ندارد</div>';
+                return;
+            }
+
+            list.innerHTML = bookmarks
+                .map(ch => `<button class="chapter-btn" onclick="loadChapter(${ch})">⭐ فصل ${ch}</button>`)
+                .join('');
+        }
+
+        // ===== CHAPTER LIST =====
+        function renderChapterList() {
+            const list = document.getElementById('chapterList');
+            let html = '';
+            for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
+                html += `<button class="chapter-btn" onclick="loadChapter(${i})">فصل ${i}</button>`;
+            }
+            list.innerHTML = html;
+        }
+
+        // ===== LOAD CHAPTER =====
+        async function loadChapter(number) {
+            if (number < 1 || number > TOTAL_CHAPTERS) return;
+
+            currentChapter = number;
+            const contentArea = document.getElementById('contentArea');
+            contentArea.innerHTML = '<div class="loading"><div class="spinner"></div><p>در حال بارگذاری...</p></div>';
+
+            try {
+                const response = await fetch(`chapters/chapter${number}.html`);
+                if (!response.ok) throw new Error('فایل یافت نشد');
+
+                let html = await response.text();
+
+                // اضافه کردن دکمه نشانک
+                const bookmarkBtn = `<button class="bookmark-btn" id="bookmarkBtn" onclick="toggleBookmark(${number})">⭐ افزودن به نشانک</button>`;
+
+                contentArea.innerHTML = bookmarkBtn + html;
+                updateBookmarkButton();
+                updateNavigationButtons();
+
+                // تجدید عنوان صفحه
+                document.getElementById('pageTitle').innerText = `فصل ${number}`;
+
+                // اسکرول به بالا
+                document.querySelector('.content-wrapper').scrollTop = 0;
+
+                // تغییر رنگ دکمه فعال
+                updateActiveButton(number);
+
+            } catch (error) {
+                contentArea.innerHTML = `<div class="loading" style="color: #e74c3c;"><p>⚠️ خطا در بارگذاری فصل</p><p style="font-size: 12px; margin-top: 10px;">${error.message}</p></div>`;
+            }
+        }
+
+        function updateBookmarkButton() {
+            const btn = document.getElementById('bookmarkBtn');
+            if (!btn) return;
+
+            if (bookmarks.includes(currentChapter)) {
+                btn.innerText = '❌ حذف از نشانک';
+                btn.classList.add('bookmarked');
+            } else {
+                btn.innerText = '⭐ افزودن به نشانک';
+                btn.classList.remove('bookmarked');
+            }
+        }
+
+        function updateActiveButton(number) {
+            document.querySelectorAll('.chapter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.chapter-btn').forEach(btn => {
+                if (btn.innerText.includes(`فصل ${number}`) && !btn.innerText.includes('⭐') && !btn.innerText.includes('❌')) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // ===== NAVIGATION =====
+        function previousChapter() {
+            if (currentChapter && currentChapter > 1) {
+                loadChapter(currentChapter - 1);
+            }
+        }
+
+        function nextChapter() {
+            if (currentChapter && currentChapter < TOTAL_CHAPTERS) {
+                loadChapter(currentChapter + 1);
+            }
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.disabled = currentChapter === null || currentChapter === 1;
+            nextBtn.disabled = currentChapter === null || currentChapter === TOTAL_CHAPTERS;
+        }
+
+        // اولین بار
+        updateNavigationButtons();
+    </script>
+</body>
+</html>
